@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Irregular Verbs Trainer</title>
+  <title>Irregular Verbs Trainer (Case-Sensitive)</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Inter"', 'sans-serif'],
           },
           colors: {
             brand: {
-              50: '#f0f7ff',
-              100: '#e0effe',
+              50: '#eff6ff',
+              100: '#dbeafe',
               500: '#3b82f6',
               600: '#2563eb',
               700: '#1d4ed8',
@@ -31,19 +31,18 @@
     }
   </script>
   <style>
-    /* Custom flip animation styles */
+    /* 3D Flip-Animation für Karteikarten */
     .perspective-1000 { perspective: 1000px; }
     .transform-style-3d { transform-style: preserve-3d; }
     .backface-hidden { backface-visibility: hidden; }
     .rotate-y-180 { transform: rotateY(180deg); }
-    
-    /* Subtle pulse animation for feedback */
+
     @keyframes pulse-success {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
+      50% { transform: scale(1.02); }
     }
     .animate-success { animation: pulse-success 0.3s ease-in-out; }
-    
+
     @keyframes shake-error {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-6px); }
@@ -54,26 +53,26 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
-  <!-- Main Navigation Header -->
+  <!-- Kopfzeile -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-          <i class="fa-solid fa-graduation-cap text-lg"></i>
+          <i class="fa-solid fa-spell-check text-lg"></i>
         </div>
         <div>
-          <h1 class="font-bold text-slate-900 leading-tight">VerbMaster</h1>
-          <p class="text-xs text-slate-500 font-medium">Simple Past Trainer</p>
+          <h1 class="font-bold text-slate-900 leading-tight">Irregular Verbs</h1>
+          <p class="text-xs text-slate-500 font-medium">Infinitive & Simple Past • Case-Sensitive</p>
         </div>
       </div>
 
-      <!-- Stats Bar in Header -->
-      <div class="flex items-center gap-3 md:gap-6 text-sm">
-        <div class="flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full font-semibold border border-amber-200/60">
+      <!-- Statistik im Header -->
+      <div class="flex items-center gap-2.5 sm:gap-4 text-sm">
+        <div class="flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full font-semibold border border-amber-200/70" title="Aktuelle Serie">
           <i class="fa-solid fa-fire text-amber-500"></i>
           <span id="streak-counter">0</span>
         </div>
-        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full font-semibold border border-emerald-200/60">
+        <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full font-semibold border border-emerald-200/70" title="Gelernte Verben">
           <i class="fa-solid fa-check text-emerald-500"></i>
           <span id="mastered-counter">0/73</span>
         </div>
@@ -81,219 +80,174 @@
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6 flex flex-col gap-6">
+  <!-- Hauptbereich -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col gap-5">
 
-    <!-- Top Control Bar (Modes & Filters) -->
-    <div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+    <!-- Modus- & Filterleiste -->
+    <div class="bg-white p-3 md:p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row justify-between items-center gap-3">
       
-      <!-- Mode Tabs -->
-      <div class="grid grid-cols-3 bg-slate-100 p-1 rounded-xl w-full sm:w-auto text-xs sm:text-sm font-semibold">
-        <button onclick="setMode('type-both')" id="btn-mode-type-both" class="mode-btn px-3 py-2 rounded-lg transition-all text-slate-600 hover:text-slate-900">
-          <i class="fa-solid fa-keyboard mr-1 sm:mr-1.5"></i>Typing Practice
+      <!-- Modi -->
+      <div class="grid grid-cols-4 bg-slate-100 p-1 rounded-xl w-full md:w-auto text-xs sm:text-sm font-semibold">
+        <button onclick="setMode('type')" id="btn-mode-type" class="mode-btn px-2.5 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-keyboard"></i>
+          <span>Tippen</span>
         </button>
-        <button onclick="setMode('mc')" id="btn-mode-mc" class="mode-btn px-3 py-2 rounded-lg transition-all text-slate-600 hover:text-slate-900">
-          <i class="fa-solid fa-list-check mr-1 sm:mr-1.5"></i>Quiz
+        <button onclick="setMode('flashcard')" id="btn-mode-flashcard" class="mode-btn px-2.5 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-clone"></i>
+          <span>Karten</span>
         </button>
-        <button onclick="setMode('flashcard')" id="btn-mode-flashcard" class="mode-btn px-3 py-2 rounded-lg transition-all text-slate-600 hover:text-slate-900">
-          <i class="fa-solid fa-clone mr-1 sm:mr-1.5"></i>Cards
+        <button onclick="setMode('mc')" id="btn-mode-mc" class="mode-btn px-2.5 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Quiz</span>
+        </button>
+        <button onclick="setMode('list')" id="btn-mode-list" class="mode-btn px-2.5 py-2 rounded-lg transition-all flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-table-list"></i>
+          <span>Liste</span>
         </button>
       </div>
 
-      <!-- Filters & List View Toggle -->
-      <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-        <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-medium">
-          <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn px-2.5 py-1.5 rounded-lg transition-all">All (73)</button>
-          <button onclick="setFilter('review')" id="btn-filter-review" class="filter-btn px-2.5 py-1.5 rounded-lg transition-all">Review</button>
-          <button onclick="setFilter('mastered')" id="btn-filter-mastered" class="filter-btn px-2.5 py-1.5 rounded-lg transition-all">Mastered</button>
+      <!-- Filter -->
+      <div id="filter-controls" class="flex items-center justify-between w-full md:w-auto gap-2">
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold w-full md:w-auto justify-around">
+          <button onclick="setFilter('all')" id="btn-filter-all" class="filter-btn px-3 py-1.5 rounded-lg transition-all">Alle (73)</button>
+          <button onclick="setFilter('review')" id="btn-filter-review" class="filter-btn px-3 py-1.5 rounded-lg transition-all">Noch üben</button>
+          <button onclick="setFilter('mastered')" id="btn-filter-mastered" class="filter-btn px-3 py-1.5 rounded-lg transition-all">Gelernt</button>
         </div>
-        
-        <button onclick="openVerbListModal()" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all" title="View Full Verb List">
-          <i class="fa-solid fa-book-open"></i>
-        </button>
       </div>
 
     </div>
 
-    <!-- Overall Session Progress Bar -->
-    <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+    <!-- Fortschrittsbalken -->
+    <div id="progress-wrapper" class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
       <div id="progress-bar" class="bg-brand-600 h-2.5 rounded-full transition-all duration-300 w-0"></div>
     </div>
 
-    <!-- Dynamic Main Content Area -->
-    <div id="trainer-card" class="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-10 flex flex-col justify-between min-h-[380px] relative overflow-hidden transition-all">
-      
-      <!-- Content injected by JavaScript -->
-
+    <!-- Dynamische Trainer-Karte -->
+    <div id="trainer-card" class="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-10 flex flex-col justify-between min-h-[410px] relative overflow-hidden transition-all">
+      <!-- Inhalte werden per JS gerendert -->
     </div>
 
   </main>
 
-  <!-- Verb List Modal -->
-  <div id="verb-list-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-3xl max-h-[85vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
-      
-      <!-- Modal Header -->
-      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-        <div class="flex items-center gap-3">
-          <div class="p-2 bg-brand-50 text-brand-600 rounded-xl">
-            <i class="fa-solid fa-book-bookmark text-lg"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-slate-800 text-lg">Verb Reference List</h3>
-            <p class="text-xs text-slate-500">Includes all 73 irregular verbs from textbook</p>
-          </div>
-        </div>
-        <button onclick="closeVerbListModal()" class="w-9 h-9 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-all">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <!-- Search Input -->
-      <div class="px-5 py-3 border-b border-slate-100 bg-white">
-        <div class="relative">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-          <input type="text" id="verb-search" oninput="renderVerbListTable()" placeholder="Search verb in English or German..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 transition-all">
-        </div>
-      </div>
-
-      <!-- Table Content -->
-      <div class="overflow-y-auto flex-1 p-5">
-        <table class="w-full text-left text-sm border-collapse">
-          <thead>
-            <tr class="border-b border-slate-200 text-slate-400 font-semibold text-xs uppercase tracking-wider">
-              <th class="py-2 px-3">Infinitive</th>
-              <th class="py-2 px-3">Simple Past</th>
-              <th class="py-2 px-3">German</th>
-              <th class="py-2 px-3 text-right">Status</th>
-            </tr>
-          </thead>
-          <tbody id="verb-table-body" class="divide-y divide-slate-100">
-            <!-- Rows injected by JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-between items-center text-xs text-slate-500">
-        <span>Tip: Click audio icon next to verbs to listen to pronunciation.</span>
-        <button onclick="closeVerbListModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-xl transition-all">Close</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Full Dataset from Textbook Pages
+    // Vollständiger Datensatz aller 73 unregelmäßigen Verben aus dem Schulbuch
     const VERBS_DATA = [
-      { inf: "be", past: "was / were", ger: "sein" },
-      { inf: "become", past: "became", ger: "werden" },
-      { inf: "begin", past: "began", ger: "beginnen, anfangen" },
-      { inf: "bite", past: "bit", ger: "beißen" },
-      { inf: "blow", past: "blew", ger: "auspusten, ausblasen" },
-      { inf: "break", past: "broke", ger: "brechen, zerbrechen" },
-      { inf: "bring", past: "brought", ger: "(mit-, her)bringen" },
-      { inf: "build", past: "built", ger: "bauen" },
-      { inf: "buy", past: "bought", ger: "kaufen" },
-      { inf: "catch", past: "caught", ger: "fangen" },
-      { inf: "choose", past: "chose", ger: "aussuchen, (aus)wählen" },
-      { inf: "come", past: "came", ger: "kommen" },
-      { inf: "cost", past: "cost", ger: "kosten" },
-      { inf: "cut", past: "cut", ger: "schneiden" },
-      { inf: "do", past: "did", ger: "tun, machen" },
-      { inf: "draw", past: "drew", ger: "zeichnen" },
-      { inf: "drive", past: "drove", ger: "fahren (mit dem Auto)" },
-      { inf: "drink", past: "drank", ger: "trinken" },
-      { inf: "eat", past: "ate", ger: "essen" },
-      { inf: "fall", past: "fell", ger: "fallen, stürzen, hinfallen" },
-      { inf: "feed", past: "fed", ger: "füttern" },
-      { inf: "feel", past: "felt", ger: "fühlen, sich fühlen" },
-      { inf: "fight", past: "fought", ger: "(be)kämpfen" },
-      { inf: "find", past: "found", ger: "finden" },
-      { inf: "fly", past: "flew", ger: "fliegen" },
-      { inf: "forget", past: "forgot", ger: "vergessen" },
-      { inf: "get", past: "got", ger: "bekommen, holen, gelangen" },
-      { inf: "give", past: "gave", ger: "geben" },
-      { inf: "go", past: "went", ger: "gehen" },
-      { inf: "grow", past: "grew", ger: "wachsen, anbauen" },
-      { inf: "hang", past: "hung", ger: "hängen" },
-      { inf: "have", past: "had", ger: "haben" },
-      { inf: "hear", past: "heard", ger: "hören" },
-      { inf: "hide", past: "hid", ger: "verstecken, sich verstecken" },
-      { inf: "hit", past: "hit", ger: "schlagen" },
-      { inf: "hold", past: "held", ger: "halten" },
-      { inf: "hurt", past: "hurt", ger: "schmerzen, wehtun, verletzen" },
-      { inf: "know", past: "knew", ger: "wissen, kennen" },
-      { inf: "leave", past: "left", ger: "verlassen, weggehen" },
-      { inf: "let", past: "let", ger: "lassen" },
-      { inf: "lie", past: "lay", ger: "liegen" },
-      { inf: "light", past: "lit", ger: "anzünden" },
-      { inf: "lose", past: "lost", ger: "verlieren" },
-      { inf: "make", past: "made", ger: "machen, herstellen" },
-      { inf: "mean", past: "meant", ger: "bedeuten, meinen" },
-      { inf: "meet", past: "met", ger: "treffen, kennenlernen" },
-      { inf: "pay", past: "paid", ger: "bezahlen" },
-      { inf: "put", past: "put", ger: "legen, stellen, tun" },
-      { inf: "read", past: "read", ger: "lesen" },
-      { inf: "ride", past: "rode", ger: "reiten, (Rad) fahren" },
-      { inf: "ring", past: "rang", ger: "klingeln, läuten" },
-      { inf: "run", past: "ran", ger: "rennen, laufen" },
-      { inf: "say", past: "said", ger: "sagen" },
-      { inf: "see", past: "saw", ger: "sehen" },
-      { inf: "sell", past: "sold", ger: "verkaufen" },
-      { inf: "send", past: "sent", ger: "schicken, senden" },
-      { inf: "shake", past: "shook", ger: "schütteln" },
-      { inf: "sing", past: "sang", ger: "singen" },
-      { inf: "sit", past: "sat", ger: "sitzen, sich setzen" },
-      { inf: "sleep", past: "slept", ger: "schlafen" },
-      { inf: "speak", past: "spoke", ger: "sprechen" },
-      { inf: "stand", past: "stood", ger: "stehen" },
-      { inf: "stick", past: "stuck", ger: "stechen, stecken" },
-      { inf: "swim", past: "swam", ger: "schwimmen" },
-      { inf: "take", past: "took", ger: "nehmen, mitnehmen" },
-      { inf: "tell", past: "told", ger: "erzählen, berichten" },
-      { inf: "think", past: "thought", ger: "denken, glauben" },
-      { inf: "throw", past: "threw", ger: "werfen" },
-      { inf: "understand", past: "understood", ger: "verstehen" },
-      { inf: "wake up", past: "woke up", ger: "aufwachen, aufwecken" },
-      { inf: "wear", past: "wore", ger: "tragen (Kleidung)" },
-      { inf: "win", past: "won", ger: "gewinnen" },
-      { inf: "write", past: "wrote", ger: "schreiben" }
+      { id: 1, ger: "sein", inf: "be", infAlts: ["be"], past: "was / were", pastAlts: ["was/were", "was / were", "was", "were"] },
+      { id: 2, ger: "werden", inf: "become", infAlts: ["become"], past: "became", pastAlts: ["became"] },
+      { id: 3, ger: "beginnen, anfangen", inf: "begin", infAlts: ["begin"], past: "began", pastAlts: ["began"] },
+      { id: 4, ger: "beißen", inf: "bite", infAlts: ["bite"], past: "bit", pastAlts: ["bit"] },
+      { id: 5, ger: "etwas auspusten, ausblasen", inf: "blow sth. out", infAlts: ["blow out", "blow sth. out", "blow sth out", "blow something out"], past: "blew out", pastAlts: ["blew out", "blew sth. out", "blew sth out", "blew something out", "blew"] },
+      { id: 6, ger: "brechen; zerbrechen", inf: "break", infAlts: ["break"], past: "broke", pastAlts: ["broke"] },
+      { id: 7, ger: "(mit-, her)bringen", inf: "bring", infAlts: ["bring"], past: "brought", pastAlts: ["brought"] },
+      { id: 8, ger: "bauen", inf: "build", infAlts: ["build"], past: "built", pastAlts: ["built"] },
+      { id: 9, ger: "kaufen", inf: "buy", infAlts: ["buy"], past: "bought", pastAlts: ["bought"] },
+      { id: 10, ger: "fangen", inf: "catch", infAlts: ["catch"], past: "caught", pastAlts: ["caught"] },
+      { id: 11, ger: "aussuchen, (aus)wählen; sich aussuchen", inf: "choose", infAlts: ["choose"], past: "chose", pastAlts: ["chose"] },
+      { id: 12, ger: "kommen", inf: "come", infAlts: ["come"], past: "came", pastAlts: ["came"] },
+      { id: 13, ger: "kosten", inf: "cost", infAlts: ["cost"], past: "cost", pastAlts: ["cost"] },
+      { id: 14, ger: "schneiden", inf: "cut", infAlts: ["cut"], past: "cut", pastAlts: ["cut"] },
+      { id: 15, ger: "tun, machen", inf: "do", infAlts: ["do"], past: "did", pastAlts: ["did"] },
+      { id: 16, ger: "zeichnen", inf: "draw", infAlts: ["draw"], past: "drew", pastAlts: ["drew"] },
+      { id: 17, ger: "(mit dem Auto) fahren", inf: "drive", infAlts: ["drive"], past: "drove", pastAlts: ["drove"] },
+      { id: 18, ger: "trinken", inf: "drink", infAlts: ["drink"], past: "drank", pastAlts: ["drank"] },
+      { id: 19, ger: "essen", inf: "eat", infAlts: ["eat"], past: "ate", pastAlts: ["ate"] },
+      { id: 20, ger: "fallen, stürzen; hinfallen", inf: "fall", infAlts: ["fall"], past: "fell", pastAlts: ["fell"] },
+      { id: 21, ger: "füttern", inf: "feed", infAlts: ["feed"], past: "fed", pastAlts: ["fed"] },
+      { id: 22, ger: "fühlen; sich fühlen", inf: "feel", infAlts: ["feel"], past: "felt", pastAlts: ["felt"] },
+      { id: 23, ger: "(be)kämpfen", inf: "fight", infAlts: ["fight"], past: "fought", pastAlts: ["fought"] },
+      { id: 24, ger: "finden", inf: "find", infAlts: ["find"], past: "found", pastAlts: ["found"] },
+      { id: 25, ger: "fliegen", inf: "fly", infAlts: ["fly"], past: "flew", pastAlts: ["flew"] },
+      { id: 26, ger: "vergessen", inf: "forget", infAlts: ["forget"], past: "forgot", pastAlts: ["forgot"] },
+      { id: 27, ger: "bekommen; holen, besorgen; werden; gelangen, (hin)kommen", inf: "get", infAlts: ["get"], past: "got", pastAlts: ["got"] },
+      { id: 28, ger: "geben", inf: "give", infAlts: ["give"], past: "gave", pastAlts: ["gave"] },
+      { id: 29, ger: "gehen", inf: "go", infAlts: ["go"], past: "went", pastAlts: ["went"] },
+      { id: 30, ger: "wachsen; anbauen, anpflanzen", inf: "grow", infAlts: ["grow"], past: "grew", pastAlts: ["grew"] },
+      { id: 31, ger: "hängen", inf: "hang", infAlts: ["hang"], past: "hung", pastAlts: ["hung"] },
+      { id: 32, ger: "haben", inf: "have", infAlts: ["have"], past: "had", pastAlts: ["had"] },
+      { id: 33, ger: "hören", inf: "hear", infAlts: ["hear"], past: "heard", pastAlts: ["heard"] },
+      { id: 34, ger: "verstecken; sich verstecken", inf: "hide", infAlts: ["hide"], past: "hid", pastAlts: ["hid"] },
+      { id: 35, ger: "schlagen", inf: "hit", infAlts: ["hit"], past: "hit", pastAlts: ["hit"] },
+      { id: 36, ger: "halten", inf: "hold", infAlts: ["hold"], past: "held", pastAlts: ["held"] },
+      { id: 37, ger: "schmerzen, wehtun; verletzen", inf: "hurt", infAlts: ["hurt"], past: "hurt", pastAlts: ["hurt"] },
+      { id: 38, ger: "wissen; kennen", inf: "know", infAlts: ["know"], past: "knew", pastAlts: ["knew"] },
+      { id: 39, ger: "(weg)gehen; abfahren; (zurück)lassen; verlassen", inf: "leave", infAlts: ["leave"], past: "left", pastAlts: ["left"] },
+      { id: 40, ger: "lassen", inf: "let", infAlts: ["let"], past: "let", pastAlts: ["let"] },
+      { id: 41, ger: "liegen", inf: "lie", infAlts: ["lie"], past: "lay", pastAlts: ["lay"] },
+      { id: 42, ger: "anzünden", inf: "light", infAlts: ["light"], past: "lit", pastAlts: ["lit"] },
+      { id: 43, ger: "verlieren", inf: "lose", infAlts: ["lose"], past: "lost", pastAlts: ["lost"] },
+      { id: 44, ger: "machen; herstellen", inf: "make", infAlts: ["make"], past: "made", pastAlts: ["made"] },
+      { id: 45, ger: "bedeuten; meinen", inf: "mean", infAlts: ["mean"], past: "meant", pastAlts: ["meant"] },
+      { id: 46, ger: "treffen; sich treffen; kennenlernen", inf: "meet", infAlts: ["meet"], past: "met", pastAlts: ["met"] },
+      { id: 47, ger: "bezahlen", inf: "pay", infAlts: ["pay"], past: "paid", pastAlts: ["paid"] },
+      { id: 48, ger: "(etwas wohin) tun, legen, stellen", inf: "put", infAlts: ["put"], past: "put", pastAlts: ["put"] },
+      { id: 49, ger: "lesen", inf: "read", infAlts: ["read"], past: "read", pastAlts: ["read"] },
+      { id: 50, ger: "reiten; (Rad) fahren", inf: "ride", infAlts: ["ride"], past: "rode", pastAlts: ["rode"] },
+      { id: 51, ger: "klingeln, läuten", inf: "ring", infAlts: ["ring"], past: "rang", pastAlts: ["rang"] },
+      { id: 52, ger: "rennen, laufen", inf: "run", infAlts: ["run"], past: "ran", pastAlts: ["ran"] },
+      { id: 53, ger: "sagen", inf: "say", infAlts: ["say"], past: "said", pastAlts: ["said"] },
+      { id: 54, ger: "sehen", inf: "see", infAlts: ["see"], past: "saw", pastAlts: ["saw"] },
+      { id: 55, ger: "verkaufen", inf: "sell", infAlts: ["sell"], past: "sold", pastAlts: ["sold"] },
+      { id: 56, ger: "schicken, senden", inf: "send", infAlts: ["send"], past: "sent", pastAlts: ["sent"] },
+      { id: 57, ger: "schütteln", inf: "shake", infAlts: ["shake"], past: "shook", pastAlts: ["shook"] },
+      { id: 58, ger: "singen", inf: "sing", infAlts: ["sing"], past: "sang", pastAlts: ["sang"] },
+      { id: 59, ger: "sitzen; sich setzen", inf: "sit", infAlts: ["sit"], past: "sat", pastAlts: ["sat"] },
+      { id: 60, ger: "schlafen", inf: "sleep", infAlts: ["sleep"], past: "slept", pastAlts: ["slept"] },
+      { id: 61, ger: "sprechen", inf: "speak", infAlts: ["speak"], past: "spoke", pastAlts: ["spoke"] },
+      { id: 62, ger: "stehen; sich (hin)stellen", inf: "stand", infAlts: ["stand"], past: "stood", pastAlts: ["stood"] },
+      { id: 63, ger: "stechen, stecken", inf: "stick", infAlts: ["stick"], past: "stuck", pastAlts: ["stuck"] },
+      { id: 64, ger: "schwimmen", inf: "swim", infAlts: ["swim"], past: "swam", pastAlts: ["swam"] },
+      { id: 65, ger: "nehmen, mitnehmen; (weg-, hin)bringen; dauern, (Zeit) brauchen", inf: "take", infAlts: ["take"], past: "took", pastAlts: ["took"] },
+      { id: 66, ger: "erzählen, berichten", inf: "tell", infAlts: ["tell"], past: "told", pastAlts: ["told"] },
+      { id: 67, ger: "denken, glauben", inf: "think", infAlts: ["think"], past: "thought", pastAlts: ["thought"] },
+      { id: 68, ger: "werfen", inf: "throw", infAlts: ["throw"], past: "threw", pastAlts: ["threw"] },
+      { id: 69, ger: "verstehen", inf: "understand", infAlts: ["understand"], past: "understood", pastAlts: ["understood"] },
+      { id: 70, ger: "aufwachen; (auf)wecken", inf: "wake up", infAlts: ["wake up"], past: "woke up", pastAlts: ["woke up"] },
+      { id: 71, ger: "tragen (Kleidung)", inf: "wear", infAlts: ["wear"], past: "wore", pastAlts: ["wore"] },
+      { id: 72, ger: "gewinnen", inf: "win", infAlts: ["win"], past: "won", pastAlts: ["won"] },
+      { id: 73, ger: "schreiben", inf: "write", infAlts: ["write"], past: "wrote", pastAlts: ["wrote"] }
     ];
 
-    // State Management
-    let currentMode = 'type-both'; // 'type-both', 'mc', 'flashcard'
+    // App-Zustand
+    let currentMode = 'type'; // 'type', 'flashcard', 'mc', 'list'
     let currentFilter = 'all'; // 'all', 'review', 'mastered'
     let activeQueue = [];
     let currentIndex = 0;
     let streak = 0;
-    let isFlipped = false; // For flashcards
-    
-    // User progress saved in localStorage
-    let progressData = JSON.parse(localStorage.getItem('verbMaster_progress')) || {};
+    let isFlipped = false;
 
-    // DOM Elements
+    // Fortschritt aus localStorage laden
+    let progressData = {};
+    try {
+      progressData = JSON.parse(localStorage.getItem('verbMaster_cs_progress')) || {};
+    } catch (e) {
+      progressData = {};
+    }
+
+    // DOM-Elemente
     const trainerCard = document.getElementById('trainer-card');
     const streakCounter = document.getElementById('streak-counter');
     const masteredCounter = document.getElementById('mastered-counter');
     const progressBar = document.getElementById('progress-bar');
+    const progressWrapper = document.getElementById('progress-wrapper');
+    const filterControls = document.getElementById('filter-controls');
 
-    // Initialize App
+    // Initialisierung
     window.addEventListener('DOMContentLoaded', () => {
+      updateModeButtons();
+      updateFilterButtons();
       initSession();
       updateHeaderStats();
     });
 
     function initSession() {
-      // Filter list based on criteria
       if (currentFilter === 'mastered') {
-        activeQueue = VERBS_DATA.filter(v => progressData[v.inf] && progressData[v.inf].mastered);
+        activeQueue = VERBS_DATA.filter(v => progressData[v.id] && progressData[v.id].mastered);
       } else if (currentFilter === 'review') {
-        activeQueue = VERBS_DATA.filter(v => !progressData[v.inf] || !progressData[v.inf].mastered);
+        activeQueue = VERBS_DATA.filter(v => !progressData[v.id] || !progressData[v.id].mastered);
       } else {
         activeQueue = [...VERBS_DATA];
       }
 
-      // Shuffle queue for randomized learning
       shuffleArray(activeQueue);
       currentIndex = 0;
       updateUI();
@@ -306,44 +260,54 @@
       }
     }
 
-    function setMode(mode) {
-      currentMode = mode;
-      
-      // Update Mode Buttons UI
+    function updateModeButtons() {
       document.querySelectorAll('.mode-btn').forEach(btn => {
         btn.classList.remove('bg-white', 'text-brand-600', 'shadow-sm');
-        btn.classList.add('text-slate-600');
+        btn.classList.add('text-slate-600', 'hover:text-slate-900');
       });
-      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      const activeBtn = document.getElementById(`btn-mode-${currentMode}`);
       if (activeBtn) {
         activeBtn.classList.add('bg-white', 'text-brand-600', 'shadow-sm');
-        activeBtn.classList.remove('text-slate-600');
+        activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900');
       }
+    }
 
-      initSession();
+    function updateFilterButtons() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+        btn.classList.add('text-slate-500', 'hover:text-slate-800');
+      });
+      const activeBtn = document.getElementById(`btn-filter-${currentFilter}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+        activeBtn.classList.remove('text-slate-500', 'hover:text-slate-800');
+      }
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      updateModeButtons();
+
+      if (mode === 'list') {
+        progressWrapper.classList.add('hidden');
+        filterControls.classList.add('hidden');
+        renderListMode();
+      } else {
+        progressWrapper.classList.remove('hidden');
+        filterControls.classList.remove('hidden');
+        initSession();
+      }
     }
 
     function setFilter(filter) {
       currentFilter = filter;
-
-      // Update Filter Buttons UI
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
-        btn.classList.add('text-slate-500');
-      });
-      const activeBtn = document.getElementById(`btn-filter-${filter}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
-        activeBtn.classList.remove('text-slate-500');
-      }
-
+      updateFilterButtons();
       initSession();
     }
 
     function updateHeaderStats() {
       const total = VERBS_DATA.length;
-      const masteredCount = VERBS_DATA.filter(v => progressData[v.inf] && progressData[v.inf].mastered).length;
-      
+      const masteredCount = VERBS_DATA.filter(v => progressData[v.id] && progressData[v.id].mastered).length;
       masteredCounter.innerText = `${masteredCount}/${total}`;
       streakCounter.innerText = streak;
     }
@@ -358,21 +322,32 @@
     }
 
     function renderEmptyState() {
+      const filterLabel = currentFilter === 'mastered' ? 'Gelernt' : currentFilter === 'review' ? 'Noch üben' : 'Alle';
       trainerCard.innerHTML = `
-        <div class="flex flex-col items-center justify-center text-center py-12">
+        <div class="flex flex-col items-center justify-center text-center py-12 my-auto">
           <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-2xl mb-4">
             <i class="fa-solid fa-trophy"></i>
           </div>
-          <h2 class="text-2xl font-bold text-slate-800 mb-2">Queue Completed!</h2>
-          <p class="text-slate-500 max-w-md mb-6">No verbs match your selected filter (${currentFilter}). You can switch filters or restart practice.</p>
-          <button onclick="setFilter('all')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 transition-all">
-            Practice All Verbs
-          </button>
+          <h2 class="text-2xl font-bold text-slate-800 mb-2">Durchgang abgeschlossen!</h2>
+          <p class="text-slate-500 max-w-md mb-6">Im Filter „${filterLabel}“ sind aktuell keine weiteren Verben offen. Du kannst den Filter wechseln oder neu starten.</p>
+          <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="setFilter('all')" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 transition-all">
+              Alle 73 Verben üben
+            </button>
+            <button onclick="initSession()" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all">
+              Neu mischen
+            </button>
+          </div>
         </div>
       `;
     }
 
     function updateUI() {
+      if (currentMode === 'list') {
+        renderListMode();
+        return;
+      }
+
       updateProgressBar();
 
       if (activeQueue.length === 0 || currentIndex >= activeQueue.length) {
@@ -382,20 +357,20 @@
 
       const currentVerb = activeQueue[currentIndex];
 
-      if (currentMode === 'type-both') {
-        renderTypeBothMode(currentVerb);
-      } else if (currentMode === 'mc') {
-        renderMCMode(currentVerb);
+      if (currentMode === 'type') {
+        renderTypeMode(currentVerb);
       } else if (currentMode === 'flashcard') {
         renderFlashcardMode(currentVerb);
+      } else if (currentMode === 'mc') {
+        renderMCMode(currentVerb);
       }
     }
 
-    // Speech synthesis function
+    // Sprachausgabe (Text-to-Speech)
     function speak(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const cleanText = text.replace('/', ' or ');
+        const cleanText = text.replace(/\//g, ' or ').replace(/sth\./g, 'something');
         const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'en-US';
         utterance.rate = 0.9;
@@ -403,57 +378,91 @@
       }
     }
 
-    // Normalized string comparison logic
-    function isAnswerCorrect(userInput, targetAnswer) {
-      let cleanInput = userInput.trim().toLowerCase();
-      
-      // Remove optional '(to)' or 'to ' from input if present
-      cleanInput = cleanInput.replace(/^(to\s+)/, '').trim();
+    /**
+     * Strikte Case-Sensitive Prüfung!
+     * - Großbuchstaben (z. B. "Went" statt "went" oder "To go" statt "to go") werden als FALSCH gewertet.
+     * - Beim Infinitiv ist optionales kleingeschriebenes "to " erlaubt (z. B. "go" oder "to go").
+     * - Erkennt, ob die Eingabe inhaltlich richtig wäre, wenn alles kleingeschrieben wäre (für gezieltes Feedback).
+     */
+    function validateField(userInput, allowedList, allowOptionalTo) {
+      // Nur führende und abschließende Leerzeichen entfernen, Groß-/Kleinschreibung NICHT ändern!
+      let trimmed = userInput.trim();
 
-      // Normalize target
-      let targetClean = targetAnswer.trim().toLowerCase();
-
-      // Handle 'was / were' special case
-      if (targetClean.includes('was') && targetClean.includes('were')) {
-        return cleanInput === 'was/were' || cleanInput === 'was / were' || cleanInput === 'was' || cleanInput === 'were' || cleanInput === 'was or were';
+      if (!trimmed) {
+        return { isCorrect: false, caseError: false };
       }
 
-      return cleanInput === targetClean;
+      // Bei Infinitiv optionales kleingeschriebenes "to " am Anfang entfernen
+      // Hinweis: "To " (großes T) wird NICHT entfernt und führt damit gewollt zum Case-Fehler!
+      let processed = trimmed;
+      if (allowOptionalTo && processed.startsWith('to ')) {
+        processed = processed.slice(3).trim();
+      }
+
+      // Mehrfache innere Leerzeichen normalisieren (z. B. "was  /  were" -> "was / were"), Case bleibt erhalten!
+      processed = processed.replace(/\s+/g, ' ');
+
+      // Exakter Abgleich (case-sensitive)
+      if (allowedList.includes(processed)) {
+        return { isCorrect: true, caseError: false };
+      }
+
+      // Prüfen, ob nur die Groß-/Kleinschreibung falsch war
+      let lowerProcessed = trimmed.toLowerCase();
+      if (allowOptionalTo && lowerProcessed.startsWith('to ')) {
+        lowerProcessed = lowerProcessed.slice(3).trim();
+      }
+      lowerProcessed = lowerProcessed.replace(/\s+/g, ' ');
+
+      const lowerAllowed = allowedList.map(a => a.toLowerCase());
+      if (lowerAllowed.includes(lowerProcessed)) {
+        return { isCorrect: false, caseError: true };
+      }
+
+      return { isCorrect: false, caseError: false };
     }
 
-    // --- MODE 1: TYPING PRACTICE (BOTH INFINITIVE AND SIMPLE PAST) ---
-    function renderTypeBothMode(verb) {
+    // --- MODUS 1: TIPPEN (CASE-SENSITIVE) ---
+    function renderTypeMode(verb) {
       trainerCard.innerHTML = `
         <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
-          <span>QUESTION ${currentIndex + 1} OF ${activeQueue.length}</span>
-          <span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-md font-bold">German Prompt</span>
+          <span>VERB ${currentIndex + 1} VON ${activeQueue.length}</span>
+          <span class="bg-amber-50 text-amber-700 border border-amber-200/80 px-2.5 py-1 rounded-md font-bold flex items-center gap-1">
+            <i class="fa-solid fa-font text-[10px]"></i> Kleinschreibung beachten
+          </span>
         </div>
 
         <div class="my-auto py-6 text-center">
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Translate & Form Past Tense</p>
-          <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">${verb.ger}</h2>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Deutsch</p>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">${verb.ger}</h2>
         </div>
 
         <div class="space-y-4">
           <div id="feedback-area" class="hidden p-4 rounded-2xl text-center text-sm font-medium"></div>
 
-          <form id="type-form" onsubmit="handleBothSubmit(event, '${verb.inf.replace(/'/g, "\\'")}', '${verb.past.replace(/'/g, "\\'")}', '${verb.inf}')" class="flex flex-col gap-3">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <form id="type-form" onsubmit="handleTypeSubmit(event)" class="flex flex-col gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div>
-                <label class="block text-xs font-bold text-slate-500 mb-1">Infinitive</label>
-                <input type="text" id="type-inf-input" placeholder="e.g. ${verb.inf === 'be' ? 'be' : 'throw'}" autocomplete="off" autoFocus 
+                <div class="flex justify-between items-center mb-1">
+                  <label for="type-inf-input" class="text-xs font-bold text-slate-600">Infinitive</label>
+                  <span class="text-[11px] text-slate-400">mit oder ohne „to“</span>
+                </div>
+                <input type="text" id="type-inf-input" placeholder="z. B. go oder to go" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
                   class="w-full px-4 py-3.5 text-base bg-slate-50 border-2 border-slate-200 focus:border-brand-500 focus:bg-white rounded-xl outline-none transition-all font-medium">
               </div>
               <div>
-                <label class="block text-xs font-bold text-slate-500 mb-1">Simple Past</label>
-                <input type="text" id="type-past-input" placeholder="e.g. ${verb.inf === 'be' ? 'was/were' : 'threw'}" autocomplete="off" 
+                <div class="flex justify-between items-center mb-1">
+                  <label for="type-past-input" class="text-xs font-bold text-slate-600">Simple Past</label>
+                  <span class="text-[11px] text-slate-400">Vergangenheitsform</span>
+                </div>
+                <input type="text" id="type-past-input" placeholder="z. B. went" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
                   class="w-full px-4 py-3.5 text-base bg-slate-50 border-2 border-slate-200 focus:border-brand-500 focus:bg-white rounded-xl outline-none transition-all font-medium">
               </div>
             </div>
 
             <button type="submit" id="submit-btn" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2 mt-2">
-              <span>Check Answers</span>
-              <i class="fa-solid fa-arrow-right"></i>
+              <span>Überprüfen</span>
+              <i class="fa-solid fa-check"></i>
             </button>
           </form>
         </div>
@@ -465,188 +474,139 @@
       }, 50);
     }
 
-    function handleBothSubmit(e, targetInf, targetPast, verbKey) {
+    function handleTypeSubmit(e) {
       e.preventDefault();
+      const verb = activeQueue[currentIndex];
       const infInput = document.getElementById('type-inf-input');
       const pastInput = document.getElementById('type-past-input');
       const feedback = document.getElementById('feedback-area');
       const submitBtn = document.getElementById('submit-btn');
-      
+
       if (!infInput || infInput.disabled) return;
 
-      const infCorrect = isAnswerCorrect(infInput.value, targetInf);
-      const pastCorrect = isAnswerCorrect(pastInput.value, targetPast);
-      const allCorrect = infCorrect && pastCorrect;
+      const infRes = validateField(infInput.value, verb.infAlts, true);
+      const pastRes = validateField(pastInput.value, verb.pastAlts, false);
+      const allCorrect = infRes.isCorrect && pastRes.isCorrect;
+      const anyCaseError = (!infRes.isCorrect && infRes.caseError) || (!pastRes.isCorrect && pastRes.caseError);
 
       infInput.disabled = true;
       pastInput.disabled = true;
+
+      // Eingabefelder farblich markieren
+      infInput.classList.remove('border-slate-200', 'bg-slate-50');
+      infInput.classList.add(infRes.isCorrect ? 'border-emerald-500' : 'border-rose-500', infRes.isCorrect ? 'bg-emerald-50/40' : 'bg-rose-50/40');
+
+      pastInput.classList.remove('border-slate-200', 'bg-slate-50');
+      pastInput.classList.add(pastRes.isCorrect ? 'border-emerald-500' : 'border-rose-500', pastRes.isCorrect ? 'bg-emerald-50/40' : 'bg-rose-50/40');
+
       feedback.classList.remove('hidden');
 
       if (allCorrect) {
         streak++;
-        recordProgress(verbKey, true);
-        feedback.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 animate-success";
-        feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 text-lg mr-2"></i> Perfect! <strong>to ${targetInf}</strong> &rarr; <strong>${targetPast}</strong>`;
-        speak(`${targetInf}. ${targetPast}`);
+        recordProgress(verb.id, true);
+        feedback.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 animate-success flex flex-col sm:flex-row items-center justify-center gap-2";
+        feedback.innerHTML = `
+          <div>
+            <i class="fa-solid fa-circle-check text-emerald-500 text-lg mr-1.5"></i>
+            Richtig! <strong class="font-bold">(to) ${verb.inf}</strong> &rarr; <strong class="font-bold">${verb.past}</strong>
+          </div>
+          <button type="button" onclick="speak('${verb.inf}. ${verb.past}')" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-lg text-xs font-bold transition-colors">
+            <i class="fa-solid fa-volume-high mr-1"></i> Anhören
+          </button>
+        `;
+        speak(`${verb.inf}. ${verb.past}`);
       } else {
         streak = 0;
-        recordProgress(verbKey, false);
-        feedback.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-700 border border-rose-200 animate-error";
+        recordProgress(verb.id, false);
+        feedback.className = "p-4 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-800 border border-rose-200 animate-error space-y-1";
+        
+        let caseHintHtml = "";
+        if (anyCaseError) {
+          caseHintHtml = `
+            <div class="inline-block px-3 py-1 bg-amber-100 text-amber-900 rounded-lg text-xs font-bold mb-1">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i> Groß-/Kleinschreibung beachten! Englische Verben werden kleingeschrieben.
+            </div>
+          `;
+        }
+
         feedback.innerHTML = `
-          <i class="fa-solid fa-circle-xmark text-rose-500 text-lg mr-2"></i> Incorrect! 
-          Correct pair: <span class="font-bold underline">to ${targetInf}</span> &rarr; <span class="font-bold underline">${targetPast}</span>
+          ${caseHintHtml}
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+            <div>
+              <i class="fa-solid fa-circle-xmark text-rose-500 text-lg mr-1.5"></i>
+              Leider falsch. Richtig ist: <span class="font-bold underline">(to) ${verb.inf}</span> &rarr; <span class="font-bold underline">${verb.past}</span>
+            </div>
+            <button type="button" onclick="speak('${verb.inf}. ${verb.past}')" class="px-2.5 py-1 bg-rose-100 hover:bg-rose-200 text-rose-800 rounded-lg text-xs font-bold transition-colors">
+              <i class="fa-solid fa-volume-high mr-1"></i> Anhören
+            </button>
+          </div>
         `;
       }
 
       updateHeaderStats();
 
-      // Replace Check button with Next button
+      // Button durch "Nächstes Verb" ersetzen
       submitBtn.outerHTML = `
-        <button onclick="nextQuestion()" class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 mt-2">
-          <span>Next Verb</span>
-          <i class="fa-solid fa-chevron-right"></i>
+        <button type="button" id="next-btn" onclick="nextQuestion()" class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 mt-2">
+          <span>Nächstes Verb</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </button>
       `;
+
+      setTimeout(() => {
+        const nextBtn = document.getElementById('next-btn');
+        if (nextBtn) nextBtn.focus();
+      }, 50);
     }
 
-    // --- MODE 2: MULTIPLE CHOICE QUIZ ---
-    function renderMCMode(verb) {
-      // Generate 3 wrong options matching pair format "inf -> past"
-      const correctText = `to ${verb.inf}  →  ${verb.past}`;
-      const options = [correctText];
-      
-      while (options.length < 4) {
-        const randomVerb = VERBS_DATA[Math.floor(Math.random() * VERBS_DATA.length)];
-        const optText = `to ${randomVerb.inf}  →  ${randomVerb.past}`;
-        if (!options.includes(optText)) {
-          options.push(optText);
-        }
-      }
-      shuffleArray(options);
-
-      trainerCard.innerHTML = `
-        <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
-          <span>QUESTION ${currentIndex + 1} OF ${activeQueue.length}</span>
-          <span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-md font-bold">German Prompt</span>
-        </div>
-
-        <div class="my-auto py-4 text-center">
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Select the correct English pair for:</p>
-          <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">${verb.ger}</h2>
-        </div>
-
-        <div>
-          <div id="feedback-area" class="hidden mb-4 p-3 rounded-xl text-center text-sm font-medium"></div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="mc-options">
-            ${options.map(opt => `
-              <button onclick="handleMCClick(this, '${opt.replace(/'/g, "\\'")}', '${correctText.replace(/'/g, "\\'")}', '${verb.inf}')" 
-                class="mc-option p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-slate-300 rounded-2xl font-bold text-slate-800 text-base text-left transition-all flex justify-between items-center">
-                <span>${opt}</span>
-                <i class="fa-regular fa-circle text-slate-300 text-lg icon-placeholder"></i>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    function handleMCClick(selectedBtn, selectedVal, correctVal, verbKey) {
-      const allOptions = document.querySelectorAll('.mc-option');
-      const feedback = document.getElementById('feedback-area');
-
-      // Disable further clicks
-      allOptions.forEach(btn => btn.onclick = null);
-
-      feedback.classList.remove('hidden');
-
-      if (selectedVal === correctVal) {
-        streak++;
-        recordProgress(verbKey, true);
-        selectedBtn.classList.remove('bg-slate-50', 'border-slate-200');
-        selectedBtn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
-        selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-500 text-lg";
-        
-        feedback.className = "mb-4 p-3 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200";
-        feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i> Spot on! That is correct.`;
-      } else {
-        streak = 0;
-        recordProgress(verbKey, false);
-        selectedBtn.classList.remove('bg-slate-50', 'border-slate-200');
-        selectedBtn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
-        selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-xmark text-rose-500 text-lg";
-
-        // Highlight the correct one
-        allOptions.forEach(btn => {
-          if (btn.innerText.trim() === correctVal) {
-            btn.classList.remove('bg-slate-50', 'border-slate-200');
-            btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
-          }
-        });
-
-        feedback.className = "mb-4 p-3 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-700 border border-rose-200";
-        feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500 mr-2"></i> Incorrect! The right pair is <strong>${correctVal}</strong>.`;
-      }
-
-      updateHeaderStats();
-
-      // Add Next Button below feedback
-      const nextContainer = document.createElement('div');
-      nextContainer.className = "mt-4 flex justify-end";
-      nextContainer.innerHTML = `
-        <button onclick="nextQuestion()" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all flex items-center gap-2">
-          <span>Next</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      `;
-      trainerCard.appendChild(nextContainer);
-    }
-
-    // --- MODE 3: FLASHCARDS ---
+    // --- MODUS 2: KARTEIKARTEN ---
     function renderFlashcardMode(verb) {
       isFlipped = false;
       trainerCard.innerHTML = `
         <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mb-4">
-          <span>CARD ${currentIndex + 1} OF ${activeQueue.length}</span>
-          <span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-md font-bold">German Prompt</span>
+          <span>KARTE ${currentIndex + 1} VON ${activeQueue.length}</span>
+          <span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-md font-bold">Karteikarte</span>
         </div>
 
-        <div onclick="toggleFlashcard()" class="perspective-1000 my-auto cursor-pointer group">
-          <div id="flashcard-inner" class="relative w-full h-64 rounded-3xl border-2 border-slate-200 bg-gradient-to-b from-white to-slate-50 shadow-md transition-all duration-500 transform-style-3d flex items-center justify-center p-6 text-center">
+        <div onclick="toggleFlashcard()" class="perspective-1000 my-auto cursor-pointer select-none">
+          <div id="flashcard-inner" class="relative w-full h-64 sm:h-72 rounded-3xl border-2 border-slate-200 bg-gradient-to-b from-white to-slate-50 shadow-md transition-all duration-500 transform-style-3d flex items-center justify-center p-6 text-center">
             
-            <!-- Front Side (GERMAN ONLY) -->
+            <!-- Vorderseite: NUR Deutsch -->
             <div class="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6">
-              <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">German</span>
-              <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-2">${verb.ger}</h2>
-              <p class="text-xs text-slate-400 mt-6 flex items-center gap-1.5"><i class="fa-solid fa-hand-pointer text-brand-500"></i> Tap card to reveal Infinitive & Simple Past</p>
+              <span class="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2">Deutsch</span>
+              <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 mb-2 leading-tight">${verb.ger}</h2>
+              <p class="text-xs text-slate-400 mt-6 flex items-center gap-1.5">
+                <i class="fa-solid fa-hand-pointer text-brand-500"></i> Karte antippen zum Umdrehen
+              </p>
             </div>
 
-            <!-- Back Side (BOTH ENGLISH FORMS REVEALED) -->
-            <div class="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center p-6 bg-brand-50/50 rounded-3xl border-2 border-brand-200">
+            <!-- Rückseite: Infinitive & Simple Past -->
+            <div class="absolute inset-0 backface-hidden rotate-y-180 flex flex-col items-center justify-center p-6 bg-brand-50/60 rounded-3xl border-2 border-brand-200">
               <div class="space-y-3">
                 <div>
-                  <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Infinitive</span>
-                  <p class="text-2xl font-bold text-slate-800">to ${verb.inf}</p>
+                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Infinitive</span>
+                  <p class="text-2xl sm:text-3xl font-bold text-slate-800">(to) ${verb.inf}</p>
                 </div>
                 <div>
-                  <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Simple Past</span>
-                  <p class="text-3xl font-extrabold text-brand-700">${verb.past}</p>
+                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Simple Past</span>
+                  <p class="text-3xl sm:text-4xl font-extrabold text-brand-700">${verb.past}</p>
                 </div>
               </div>
-              <button onclick="speak('${verb.inf}. ${verb.past}'); event.stopPropagation();" class="mt-4 p-2 text-brand-600 hover:bg-brand-100 rounded-full transition-all" title="Listen">
-                <i class="fa-solid fa-volume-high text-base"></i>
+              <button type="button" onclick="speak('${verb.inf}. ${verb.past}'); event.stopPropagation();" class="mt-4 px-3.5 py-1.5 bg-white text-brand-600 hover:bg-brand-100 border border-brand-200 rounded-full text-xs font-bold shadow-sm transition-all flex items-center gap-1.5" title="Aussprache anhören">
+                <i class="fa-solid fa-volume-high"></i> Anhören
               </button>
             </div>
 
           </div>
         </div>
 
-        <!-- Self-Assessment Buttons -->
-        <div class="mt-6 flex items-center justify-end gap-3">
-          <button onclick="handleCardFeedback('${verb.inf}', false)" class="flex-1 sm:flex-none px-5 py-3 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl border border-rose-200 transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-xmark"></i> Need Practice
+        <!-- Selbstbewertung -->
+        <div class="mt-6 flex items-center justify-between gap-3">
+          <button onclick="handleCardFeedback(${verb.id}, false)" class="flex-1 px-5 py-3.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl border border-rose-200 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-rotate-left"></i> Nochmal üben
           </button>
-          <button onclick="handleCardFeedback('${verb.inf}', true)" class="flex-1 sm:flex-none px-5 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl border border-emerald-200 transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-check"></i> Got it Right
+          <button onclick="handleCardFeedback(${verb.id}, true)" class="flex-1 px-5 py-3.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl border border-emerald-200 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-check"></i> Gewusst
           </button>
         </div>
       `;
@@ -654,6 +614,7 @@
 
     function toggleFlashcard() {
       const cardInner = document.getElementById('flashcard-inner');
+      if (!cardInner) return;
       isFlipped = !isFlipped;
       if (isFlipped) {
         cardInner.classList.add('rotate-y-180');
@@ -662,12 +623,212 @@
       }
     }
 
-    function handleCardFeedback(verbKey, mastered) {
-      recordProgress(verbKey, mastered);
+    function handleCardFeedback(verbId, mastered) {
+      recordProgress(verbId, mastered);
       if (mastered) streak++;
       else streak = 0;
       updateHeaderStats();
       nextQuestion();
+    }
+
+    // --- MODUS 3: MULTIPLE CHOICE QUIZ ---
+    function renderMCMode(verb) {
+      const correctText = `to ${verb.inf} → ${verb.past}`;
+      const options = [correctText];
+
+      while (options.length < 4) {
+        const randomVerb = VERBS_DATA[Math.floor(Math.random() * VERBS_DATA.length)];
+        const optText = `to ${randomVerb.inf} → ${randomVerb.past}`;
+        if (!options.includes(optText)) {
+          options.push(optText);
+        }
+      }
+      shuffleArray(options);
+
+      trainerCard.innerHTML = `
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
+          <span>FRAGE ${currentIndex + 1} VON ${activeQueue.length}</span>
+          <span class="bg-brand-50 text-brand-700 px-2.5 py-1 rounded-md font-bold">Multiple Choice</span>
+        </div>
+
+        <div class="my-auto py-4 text-center">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Wähle die richtige englische Form für:</p>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">${verb.ger}</h2>
+        </div>
+
+        <div>
+          <div id="feedback-area" class="hidden mb-4 p-3.5 rounded-2xl text-center text-sm font-semibold"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="mc-options">
+            ${options.map((opt, idx) => `
+              <button type="button" data-val="${opt.replace(/"/g, '&quot;')}" onclick="handleMCClick(this)" 
+                class="mc-option p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-slate-300 rounded-2xl font-bold text-slate-800 text-base text-left transition-all flex justify-between items-center">
+                <span>${opt}</span>
+                <i class="fa-regular fa-circle text-slate-300 text-lg icon-placeholder"></i>
+              </button>
+            `).join('')}
+          </div>
+          <div id="mc-next-container" class="hidden mt-4 flex justify-end">
+            <button type="button" onclick="nextQuestion()" class="w-full sm:w-auto px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+              <span>Nächste Frage</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleMCClick(selectedBtn) {
+      const verb = activeQueue[currentIndex];
+      const correctVal = `to ${verb.inf} → ${verb.past}`;
+      const selectedVal = selectedBtn.getAttribute('data-val');
+      const allOptions = document.querySelectorAll('.mc-option');
+      const feedback = document.getElementById('feedback-area');
+      const nextContainer = document.getElementById('mc-next-container');
+
+      allOptions.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove('hover:bg-slate-100', 'hover:border-slate-300');
+      });
+
+      feedback.classList.remove('hidden');
+
+      if (selectedVal === correctVal) {
+        streak++;
+        recordProgress(verb.id, true);
+        selectedBtn.classList.remove('bg-slate-50', 'border-slate-200');
+        selectedBtn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
+        selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-500 text-lg";
+
+        feedback.className = "mb-4 p-3.5 rounded-2xl text-center text-sm font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 animate-success";
+        feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i> Perfekt! Das ist richtig.`;
+        speak(`${verb.inf}. ${verb.past}`);
+      } else {
+        streak = 0;
+        recordProgress(verb.id, false);
+        selectedBtn.classList.remove('bg-slate-50', 'border-slate-200');
+        selectedBtn.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
+        selectedBtn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-xmark text-rose-500 text-lg";
+
+        allOptions.forEach(btn => {
+          if (btn.getAttribute('data-val') === correctVal) {
+            btn.classList.remove('bg-slate-50', 'border-slate-200');
+            btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
+            btn.querySelector('.icon-placeholder').className = "fa-solid fa-circle-check text-emerald-500 text-lg";
+          }
+        });
+
+        feedback.className = "mb-4 p-3.5 rounded-2xl text-center text-sm font-semibold bg-rose-50 text-rose-800 border border-rose-200 animate-error";
+        feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500 mr-1.5"></i> Nicht ganz! Richtig ist: <strong>${correctVal}</strong>`;
+      }
+
+      updateHeaderStats();
+      nextContainer.classList.remove('hidden');
+    }
+
+    // --- MODUS 4: VERBLISTE (SUCHBAR) ---
+    function renderListMode() {
+      trainerCard.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-900">Alle 73 Verben im Überblick</h2>
+            <p class="text-xs text-slate-500">Alle Formen werden im Englischen kleingeschrieben.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1 sm:w-64">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+              <input type="text" id="verb-search" oninput="filterVerbTable()" placeholder="Verb suchen..." 
+                class="w-full pl-9 pr-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+            </div>
+            <button onclick="resetAllProgress()" class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-bold transition-colors" title="Fortschritt zurücksetzen">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto max-h-[520px] overflow-y-auto mt-3 -mx-2 px-2">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead class="sticky top-0 bg-white z-10 shadow-sm">
+              <tr class="border-b border-slate-200 text-slate-400 font-bold text-xs uppercase tracking-wider">
+                <th class="py-3 px-2">Deutsch</th>
+                <th class="py-3 px-2">Infinitive</th>
+                <th class="py-3 px-2">Simple Past</th>
+                <th class="py-3 px-2 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody id="verb-table-body" class="divide-y divide-slate-100">
+            </tbody>
+          </table>
+        </div>
+      `;
+      filterVerbTable();
+    }
+
+    function filterVerbTable() {
+      const searchInput = document.getElementById('verb-search');
+      const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const tbody = document.getElementById('verb-table-body');
+      if (!tbody) return;
+
+      const filtered = VERBS_DATA.filter(v =>
+        v.ger.toLowerCase().includes(query) ||
+        v.inf.toLowerCase().includes(query) ||
+        v.past.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-400">Keine passenden Verben gefunden.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(v => {
+        const isMastered = progressData[v.id] && progressData[v.id].mastered;
+        return `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-3 px-2 text-slate-700 font-medium">${v.ger}</td>
+            <td class="py-3 px-2 font-bold text-slate-900 whitespace-nowrap">
+              (to) ${v.inf}
+              <button onclick="speak('${v.inf}')" class="ml-1 text-slate-400 hover:text-brand-600 transition-colors" title="Anhören">
+                <i class="fa-solid fa-volume-high text-xs"></i>
+              </button>
+            </td>
+            <td class="py-3 px-2 font-bold text-brand-600 whitespace-nowrap">
+              ${v.past}
+              <button onclick="speak('${v.past}')" class="ml-1 text-slate-400 hover:text-brand-600 transition-colors" title="Anhören">
+                <i class="fa-solid fa-volume-high text-xs"></i>
+              </button>
+            </td>
+            <td class="py-3 px-2 text-right whitespace-nowrap">
+              <button onclick="toggleMasteredManual(${v.id})" class="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-semibold transition-all ${
+                isMastered
+                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+              }">
+                ${isMastered ? '<i class="fa-solid fa-check text-[10px]"></i> Gelernt' : 'Offen'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function toggleMasteredManual(verbId) {
+      if (!progressData[verbId]) {
+        progressData[verbId] = { attempts: 1, successes: 2, mastered: true };
+      } else {
+        progressData[verbId].mastered = !progressData[verbId].mastered;
+        progressData[verbId].successes = progressData[verbId].mastered ? 2 : 0;
+      }
+      localStorage.setItem('verbMaster_cs_progress', JSON.stringify(progressData));
+      updateHeaderStats();
+      filterVerbTable();
+    }
+
+    function resetAllProgress() {
+      progressData = {};
+      streak = 0;
+      localStorage.removeItem('verbMaster_cs_progress');
+      updateHeaderStats();
+      filterVerbTable();
     }
 
     function nextQuestion() {
@@ -675,79 +836,26 @@
       updateUI();
     }
 
-    // Record user learning history
-    function recordProgress(verbKey, isSuccess) {
-      if (!progressData[verbKey]) {
-        progressData[verbKey] = { attempts: 0, successes: 0, mastered: false };
+    // Lernfortschritt speichern
+    function recordProgress(verbId, isSuccess) {
+      if (!progressData[verbId]) {
+        progressData[verbId] = { attempts: 0, successes: 0, mastered: false };
       }
-      
-      progressData[verbKey].attempts++;
+
+      progressData[verbId].attempts++;
       if (isSuccess) {
-        progressData[verbKey].successes++;
+        progressData[verbId].successes++;
       } else {
-        progressData[verbKey].successes = Math.max(0, progressData[verbKey].successes - 1);
+        progressData[verbId].successes = Math.max(0, progressData[verbId].successes - 1);
       }
 
-      // Deem mastered if succeeded consecutively or >75% accuracy with at least 3 attempts
-      if (progressData[verbKey].successes >= 2) {
-        progressData[verbKey].mastered = true;
+      if (progressData[verbId].successes >= 2) {
+        progressData[verbId].mastered = true;
       } else if (!isSuccess) {
-        progressData[verbKey].mastered = false;
+        progressData[verbId].mastered = false;
       }
 
-      localStorage.setItem('verbMaster_progress', JSON.stringify(progressData));
-    }
-
-    // Modal Operations
-    function openVerbListModal() {
-      document.getElementById('verb-list-modal').classList.remove('hidden');
-      renderVerbListTable();
-    }
-
-    function closeVerbListModal() {
-      document.getElementById('verb-list-modal').classList.add('hidden');
-    }
-
-    function renderVerbListTable() {
-      const searchQuery = document.getElementById('verb-search').value.toLowerCase();
-      const tbody = document.getElementById('verb-table-body');
-      
-      const filtered = VERBS_DATA.filter(v => 
-        v.inf.toLowerCase().includes(searchQuery) || 
-        v.past.toLowerCase().includes(searchQuery) || 
-        v.ger.toLowerCase().includes(searchQuery)
-      );
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-400">No matching verbs found.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(v => {
-        const isMastered = progressData[v.inf] && progressData[v.inf].mastered;
-        return `
-          <tr class="hover:bg-slate-50 transition-colors">
-            <td class="py-3 px-3 font-semibold text-slate-800">
-              to ${v.inf}
-              <button onclick="speak('${v.inf}')" class="ml-1.5 text-slate-400 hover:text-brand-600 transition-colors">
-                <i class="fa-solid fa-volume-high text-xs"></i>
-              </button>
-            </td>
-            <td class="py-3 px-3 font-semibold text-brand-600">
-              ${v.past}
-              <button onclick="speak('${v.past}')" class="ml-1.5 text-slate-400 hover:text-brand-600 transition-colors">
-                <i class="fa-solid fa-volume-high text-xs"></i>
-              </button>
-            </td>
-            <td class="py-3 px-3 text-slate-500">${v.ger}</td>
-            <td class="py-3 px-3 text-right">
-              ${isMastered 
-                ? `<span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full font-medium"><i class="fa-solid fa-check text-xs"></i> Mastered</span>` 
-                : `<span class="inline-flex items-center gap-1 text-xs px-2.5 py-1 bg-slate-100 text-slate-500 rounded-full font-medium">Learning</span>`}
-            </td>
-          </tr>
-        `;
-      }).join('');
+      localStorage.setItem('verbMaster_cs_progress', JSON.stringify(progressData));
     }
   </script>
 </body>
